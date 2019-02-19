@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
@@ -8,11 +9,17 @@ namespace SampleWebApi.Controllers
     [ApiController]
     public class EventsController : ControllerBase
     {
+        private readonly IHostingEnvironment _hostingEnvironment;
+        public EventsController(IHostingEnvironment hostingEnvironment)
+        {
+            _hostingEnvironment = hostingEnvironment;
+        }
+
         // GET api/values
         [HttpGet]
-        public ActionResult<JObject> Get()
+        public ActionResult Get()
         {
-            return new EventService().GetEvents();
+            return new JsonResult(new EventService(_hostingEnvironment).GetEvents());
         }
 
         // GET api/values/5
