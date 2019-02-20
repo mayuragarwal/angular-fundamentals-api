@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SampleWebApi.Controllers
 {
@@ -9,30 +10,35 @@ namespace SampleWebApi.Controllers
     [ApiController]
     public class EventsController : ControllerBase
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly EventService _service;
+
         public EventsController(IHostingEnvironment hostingEnvironment)
         {
-            _hostingEnvironment = hostingEnvironment;
+            _service = new EventService(hostingEnvironment);
         }
-
-        // GET api/values
+        
         [HttpGet]
-        public ActionResult Get()
+        public ActionResult<List<Event>> Get()
         {
-            return new JsonResult(new EventService(_hostingEnvironment).GetEvents());
+            return _service.GetEvents();
         }
-
-        // GET api/values/5
+        
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Event> Get(int id)
         {
-            return "value";
+            return _service.GetEvent(id);
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpGet("sessions")]
+        public ActionResult<List<Session>> SearchSessions(string searchTerm)
         {
+            return _service.SearchSessions(searchTerm);
+        }
+
+        [HttpPost]
+        public ActionResult<int> Post([FromBody] Event value)
+        {
+            return _service.SaveEvent(value);
         }
 
         // PUT api/values/5
