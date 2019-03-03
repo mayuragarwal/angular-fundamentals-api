@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SampleWebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class EventsController : ControllerBase
     {
