@@ -32,7 +32,7 @@ namespace SampleWebApi
             services.AddSingleton<IAuthService, AuthService>();
             services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddCors();
+            //services.AddCors();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -53,12 +53,12 @@ namespace SampleWebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(builder =>
-            {
-                builder.AllowAnyOrigin();
-                builder.AllowAnyMethod();
-                builder.AllowAnyHeader();
-            });
+            //app.UseCors(builder =>
+            //{
+            //    builder.AllowAnyOrigin();
+            //    builder.AllowAnyMethod();
+            //    builder.AllowAnyHeader();
+            //});
 
             app.UseAuthentication();
             app.UseMvc();
