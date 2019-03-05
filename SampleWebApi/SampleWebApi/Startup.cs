@@ -32,16 +32,19 @@ namespace SampleWebApi
             services.AddSingleton<IAuthService, AuthService>();
             services.AddHttpContextAccessor();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            //services.AddCors();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
-            .AddCookie(options =>
-            {
-                options.LoginPath = "/api/auth/signin";
+            .AddCookie(options => {
+                options.Events.OnRedirectToLogin = (context) =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
             });
         }
 
@@ -52,13 +55,6 @@ namespace SampleWebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            //app.UseCors(builder =>
-            //{
-            //    builder.AllowAnyOrigin();
-            //    builder.AllowAnyMethod();
-            //    builder.AllowAnyHeader();
-            //});
 
             app.UseAuthentication();
             app.UseMvc();
